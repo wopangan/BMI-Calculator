@@ -1,0 +1,139 @@
+//A BMI Calculator with GUI made in Java.
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class BMI extends JFrame {
+    private JLabel heightLabel = new JLabel("Height");
+    private JLabel feetLabel = new JLabel("Feet:");
+    private JLabel inchesLabel = new JLabel("Inches:");
+    private JLabel weightLabel = new JLabel("Weight");
+    private JLabel poundsLabel = new JLabel("Pounds:");
+    private JLabel bmiLabel = new JLabel("BMI:");
+    
+    private JTextField hFeetField = new JTextField(5);
+    private JTextField hInchesField = new JTextField(5);
+    private JTextField wPoundsField = new JTextField(5);
+    private JTextField bmiField = new JTextField(5);
+
+    private JButton computeBMIButton = new JButton("Compute BMI");
+    private JButton clearButton = new JButton("Clear");
+    private JButton exitButton = new JButton("Exit");
+
+    public void exit(ActionEvent e) {
+        int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit?", "Confirm Exit", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }
+
+    private void getBMI(ActionEvent e) {
+        try {
+            float feetVal = Float.parseFloat(hFeetField.getText());
+            float inchVal = Float.parseFloat(hInchesField.getText());
+            float weightVal = Float.parseFloat(wPoundsField.getText());
+
+            float feetFinalVal = feetVal * 12;
+            float totalHeight = feetFinalVal + inchVal;
+            float heightFinalVal = totalHeight * totalHeight;
+
+            float bmiVal = weightVal / heightFinalVal;
+            float bmiFinalVal = bmiVal * 703;
+
+            bmiField.setText(String.format("%.2f", bmiFinalVal));
+
+        } catch (NumberFormatException ex) {
+
+            JOptionPane.showMessageDialog(this, "Please enter valid numerical values.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+
+        }
+    }
+
+    private void clearFields() {
+        hFeetField.setText("");
+        hInchesField.setText("");
+        wPoundsField.setText("");
+        bmiField.setText("");
+    }
+
+    public BMI() {
+        setTitle("BMI Calculator");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(5, 5, 5, 5);
+
+        // Input Fields
+        c.gridx = 0;
+        c.gridy = 0;
+        panel.add(heightLabel, c);
+
+        c.gridx = 1;
+        c.gridy = 0;
+        panel.add(feetLabel, c);
+
+        c.gridx = 2;
+        c.gridy = 0;
+        panel.add(hFeetField, c);
+
+        c.gridx = 3;
+        c.gridy = 0;
+        panel.add(inchesLabel, c);
+
+        c.gridx = 4;
+        c.gridy = 0;
+        panel.add(hInchesField, c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        panel.add(weightLabel, c);
+
+        c.gridx = 1;
+        c.gridy = 1;
+        panel.add(poundsLabel, c);
+
+        c.gridx = 2;
+        c.gridy = 1;
+        panel.add(wPoundsField, c);
+
+        // BMI Field
+        c.gridx = 0;
+        c.gridy = 2;
+        bmiField.setEditable(false);
+        panel.add(bmiLabel, c);
+
+        c.gridx = 1;
+        c.gridy = 2;
+        panel.add(bmiField, c);
+
+        // Buttons
+        c.gridx = 0;
+        c.gridy = 3;
+        panel.add(computeBMIButton, c);
+
+        c.gridx = 2;
+        c.gridy = 3;
+        panel.add(clearButton, c);
+
+        c.gridx = 3;
+        c.gridy = 3;
+        panel.add(exitButton, c);
+
+        add(panel);
+
+        // ActionListeners for the buttons
+        computeBMIButton.addActionListener(e -> getBMI(e));
+        clearButton.addActionListener(e -> clearFields());
+        exitButton.addActionListener(e -> exit(e));
+
+        pack();
+        setLocationRelativeTo(null);
+        setResizable(false);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new BMI().setVisible(true));
+    }
+}
